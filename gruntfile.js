@@ -23,6 +23,7 @@ module.exports = function(grunt) {
     connect: {
       main: {
         options: {
+          hostname: "localhost",
           port: 10129,
           livereload: true,
           open: true,
@@ -34,6 +35,12 @@ module.exports = function(grunt) {
       main: {
         files: ["src/**/*.js", "assets/*", "bower.json"],
         tasks: "build",
+        options: {
+          livereload: true
+        }
+      },
+      lib: {
+        files: ["lib/**"],
         options: {
           livereload: true
         }
