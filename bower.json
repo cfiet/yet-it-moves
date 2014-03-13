@@ -1,0 +1,20 @@
+{
+  "name": "y",
+  "version": "0.0.0",
+  "authors": [
+    "Maciej Makowski <cfiet@cfiet.net>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "three.js": "*",
+    "underscore": "~1.6.0"
+  }
+}
