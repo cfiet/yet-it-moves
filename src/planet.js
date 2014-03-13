@@ -1,6 +1,5 @@
 "use strict";
 
-var _ = require("underscore");
 var utils = require("./utils");
 var vector2 = require("./vector");
 
