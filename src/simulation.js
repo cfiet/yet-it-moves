@@ -1,7 +1,7 @@
 "use strict";
 
 var planet = require("./planet"),
-    predictorFactory = require("./predictor");
+    solverFactory = require("./solver/euler");
 
 function simulation(initialPlanets, params) {
   params = params || {};

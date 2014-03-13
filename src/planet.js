@@ -1,6 +1,5 @@
 "use strict";
 
-var utils = require("./utils");
 var vector2 = require("./vector");
 
 function planet (state) {
