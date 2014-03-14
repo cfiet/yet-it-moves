@@ -1,24 +1,25 @@
 "use strict";
 
-var planet = require("./planet"),
-    solverFactory = require("./solver/euler");
+var planet = require("./planet");
 
-function simulation(initialPlanets, params) {
+function simulation(initialPlanets, solver, renderer, params) {
   params = params || {};
 
   var running = params.running || false;
   var step = params.step || 0.1;
+  var time = 0;
   var delay = params.delay || 40;
 
   var planets = initialPlanets.map(planet);
-  var predictor = predictorFactory(planets);
 
   var interval;
 
   function start() {
     running = true;
     interval = setInterval(function () {
-      predictor.step(step);
+      time += step;
+      solver.step(step);
+      renderer.frame(time);
     }, delay);
   }
 
