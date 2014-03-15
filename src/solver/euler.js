@@ -1,7 +1,7 @@
 "use strict";
 
 var G = function () {
-    return 50;
+    return 25;
   },
   vector2 = require("../vector");
 
