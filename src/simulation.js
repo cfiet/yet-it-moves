@@ -2,20 +2,21 @@
 
 var planet = require("./planet");
 
-function simulation(initialPlanets, solver, renderer, params) {
+function simulation(initialPlanets, solverFactory, rendererFactory, params) {
   params = params || {};
 
   var running = params.running || false;
-  var step = params.step || 0.1;
+  var step = params.step || 0.5;
   var time = 0;
   var delay = params.delay || 40;
 
   var planets = initialPlanets.map(planet);
+  var solver = solverFactory(planets);
+  var renderer = rendererFactory(planets);
 
-  var interval;
+  var interval = null;
 
   function start() {
-    running = true;
     interval = setInterval(function () {
       time += step;
       solver.step(step);
@@ -24,19 +25,17 @@ function simulation(initialPlanets, solver, renderer, params) {
   }
 
   function stop() {
-    resetInterval(interval);
-    running = false;
+    clearInterval(interval);
+    interval = null;
   }
 
   return {
     start: start,
     stop: stop,
     isRunning: function () {
-      return running;
+      return interval !== null;
     }
   };
 };
 
-module.exports = {
-  simulation: simulation
-};
+module.exports = simulation;

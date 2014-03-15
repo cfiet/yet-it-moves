@@ -1,13 +1,19 @@
 "use strict";
 
 var G = function () {
-    return 1;
+    return 50;
   },
   vector2 = require("../vector");
 
 function accellerationBetweenPlanets(current, other) {
   var distance = current.position().sub(other.position()).length();
-  return other.mass() * G() / (distance*distance)
+  var unit = other.position().sub(current.position()).unit();
+
+  if(distance === 0) {
+    return vector2();
+  }
+
+  return unit.mul(other.mass() * G() / (distance*distance));
 }
 
 function eulerSolution(step, currentPlanet, allPlanets) {
@@ -20,11 +26,11 @@ function eulerSolution(step, currentPlanet, allPlanets) {
     }
     planet = allPlanets[i];
     currentAcc = accellerationBetweenPlanets(currentPlanet, planet);
-    accelleration = accelleration.add(currentAcc);
+    acceleration = acceleration.add(currentAcc);
   }
 
-  nextSpeed = currentPlanet.speed() + accelleration * step;
-  nextPosition = currentPlanet.position() + currentPlanet.speed() * step;
+  nextSpeed = currentPlanet.speed().add(acceleration.mul(step));
+  nextPosition = currentPlanet.position().add(currentPlanet.speed().mul(step));
 
   return {
     apply: function () {
@@ -47,6 +53,4 @@ function solver(planets) {
   };
 }
 
-module.exports = {
-  solver: solver
-}
+module.exports = solver;

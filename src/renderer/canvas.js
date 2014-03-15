@@ -3,25 +3,25 @@
 var random = require("../utils/random").random;
 
 function canvasPlanet(planet, context) {
-  var radius = mass / 10;
+  var radius = 5 + (planet.mass() * 5) / 27;
 
-  var red = random(128, 255);
-  var green = random(128, 255);
-  var blue = random(128, 255);
+  var red = Math.round(random(128, 255));
+  var green = Math.round(random(128, 255));
+  var blue = Math.round(random(128, 255));
 
   var alpha = 0.9;
 
   return {
     draw: function () {
       context.beginPath();
-      context.arc(planet.position().x(), panet.position().y(), 0, 2 * Math.PI, false);
-      context.fillStyle = "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+      context.arc(planet.position().x(), planet.position().y(), radius, 2 * Math.PI, false);
+      context.fillStyle = "rgb("+red+","+green+","+blue+")";
       context.fill();
     }
   };
 }
 
-function canvasRenreder(canvas, planets) {
+function canvasRenderer(canvas, planets) {
   var context = canvas.getContext("2d");
   var canvasPlanets = planets.map(function (p) {
     return canvasPlanet(p, context);
@@ -38,6 +38,4 @@ function canvasRenreder(canvas, planets) {
   };
 }
 
-module.exports = {
-  renderer: canvasRenderer
-};
+module.exports = canvasRenderer;

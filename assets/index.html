@@ -20,8 +20,20 @@
     <script src="three.js/three.min.js"></script>
     <script src="underscore/underscore.js"></script>
     <script src="planets.js"></script>
-</head>
-<body>
+    <script>
+      $(document).ready(function () {
+        var canvas = document.getElementById("target-canvas");
 
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        yim.run({
+          canvas: canvas
+        });
+      });
+    </script>
+</head>
+<body style="background-color: #000000;">
+  <canvas id="target-canvas"></canvas>
 </body>
 </html>

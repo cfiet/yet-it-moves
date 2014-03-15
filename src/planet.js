@@ -25,13 +25,18 @@ function planet (state) {
     mass: function () {
       return mass;
     },
-    update: function(position, speed) {
-      position = position;
-      speed = speed;
+    update: function(p, s) {
+      position = p;
+      speed = s;
+    },
+    toJSON: function () {
+      return {
+        position: position.toJSON(),
+        speed: speed.toJSON(),
+        mass: mass
+      };
     }
   }
 }
 
-module.exports = {
-  planet: planet
-};
+module.exports = planet;

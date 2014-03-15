@@ -19,6 +19,8 @@ function vector2(data) {
       return yValue;
     },
     length: function () {
+      var x = this.x(),
+          y = this.y();
       return Math.sqrt(x*x + y*y);
     },
     unit: function () {
@@ -43,11 +45,15 @@ function vector2(data) {
     },
     sub: function (r) {
       var rrev = r.mul(-1);
-      this.add(rrev);
+      return this.add(rrev);
+    },
+    toJSON: function () {
+      return {
+        x: this.x(),
+        y: this.y()
+      };
     }
   };
 };
 
-module.exports = {
-  vector2: vector2
-};
+module.exports = vector2;
