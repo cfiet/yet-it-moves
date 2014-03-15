@@ -9,7 +9,10 @@ function planet (state) {
   var position = vector2(state.position);
   var speed = vector2(state.speed);
 
-  return {
+  function Planet() {
+  }
+
+  Planet.prototype = {
     position: function (v) {
       if(v) {
         position = v;
@@ -36,7 +39,9 @@ function planet (state) {
         mass: mass
       };
     }
-  }
+  };
+
+  return new Planet();
 }
 
 module.exports = planet;

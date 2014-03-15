@@ -1,6 +1,6 @@
 "use strict";
 
-function vector2(data) {
+function createVector(data) {
   data = data || {};
 
   var xValue = typeof data.x === "function" && data.x()
@@ -11,7 +11,10 @@ function vector2(data) {
     || typeof data.y === "number" && data.y
     || 0.0;
 
-  return {
+  function Vector2() {
+  }
+
+  Vector2.prototype = {
     x: function () {
       return xValue;
     },
@@ -26,19 +29,19 @@ function vector2(data) {
     unit: function () {
       var l = this.length();
 
-      return vector2({
+      return createVector({
         x: this.x() / l,
         y: this.y() / l
       });
     },
     add: function (r) {
-      return vector2({
+      return createVector({
         x: this.x() + r.x(),
         y: this.y() + r.y()
       });
     },
     mul: function (a) {
-      return vector2({
+      return createVector({
         x: this.x() * a,
         y: this.y() * a
       });
@@ -54,6 +57,8 @@ function vector2(data) {
       };
     }
   };
+
+  return new Vector2();
 };
 
-module.exports = vector2;
+module.exports = createVector;

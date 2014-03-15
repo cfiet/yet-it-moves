@@ -39,7 +39,7 @@ window.yim = {
       throw new Error("Canvas are required");
     }
 
-    var planetNumber = settings.planets || 3;
+    var planetNumber = settings.planets || 512;
     var planets = createPlanets(planetNumber, canvas.width, canvas.height);
 
     var simulation = simulationFactory(planets,
