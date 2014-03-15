@@ -1,6 +1,9 @@
 "use strict";
 
+var allocations = 0;
+
 function createVector(data) {
+  allocations++;
   data = data || {};
 
   var xValue = typeof data.x === "function" && data.x()
@@ -60,5 +63,11 @@ function createVector(data) {
 
   return new Vector2();
 };
+
+createVector.getAllocations = function () {
+  var a = allocations;
+  allocations = 0;
+  return a;
+}
 
 module.exports = createVector;

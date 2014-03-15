@@ -21,6 +21,7 @@ function simulation(initialPlanets, solverFactory, rendererFactory, params) {
       time += step;
       solver.step(step);
       renderer.frame(time);
+      console.log("Allocations: ", require("./vector").getAllocations());
     }, delay);
   }
 

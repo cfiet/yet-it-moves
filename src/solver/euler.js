@@ -6,8 +6,9 @@ var G = function () {
   vector2 = require("../vector");
 
 function accellerationBetweenPlanets(current, other) {
-  var distance = current.position().sub(other.position()).length();
-  var unit = other.position().sub(current.position()).unit();
+  var difference = other.position().sub(current.position());
+  var distance = difference.length();
+  var unit = difference.unit();
 
   if(distance === 0) {
     return vector2();
