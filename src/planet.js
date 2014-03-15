@@ -1,6 +1,7 @@
 "use strict";
 
-var vector2 = require("./vector");
+var vector2 = require("./vector"),
+    currentId = 0;
 
 function planet (state) {
   state = state || {};
@@ -8,6 +9,7 @@ function planet (state) {
   var mass = state.mass || 1.0;
   var position = vector2(state.position);
   var speed = vector2(state.speed);
+  var id = currentId++;
 
   function Planet() {
   }
@@ -27,6 +29,9 @@ function planet (state) {
     },
     mass: function () {
       return mass;
+    },
+    id: function () {
+      return id;
     },
     update: function(p, s) {
       position = p;

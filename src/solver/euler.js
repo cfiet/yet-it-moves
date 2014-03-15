@@ -6,9 +6,9 @@ var G = function () {
   vector2 = require("../vector");
 
 function accellerationBetweenPlanets(current, other) {
-  var difference = other.position().sub(current.position());
+  var difference = other.position().clone().sub(current.position());
   var distance = difference.length();
-  var unit = difference.unit();
+  var unit = difference.toUnit();
 
   if(distance === 0) {
     return vector2();
@@ -30,8 +30,8 @@ function eulerSolution(step, currentPlanet, allPlanets) {
     acceleration = acceleration.add(currentAcc);
   }
 
-  nextSpeed = currentPlanet.speed().add(acceleration.mul(step));
-  nextPosition = currentPlanet.position().add(currentPlanet.speed().mul(step));
+  nextSpeed = currentPlanet.speed().clone().add(acceleration.mul(step));
+  nextPosition = currentPlanet.position().clone().add(currentPlanet.speed().mul(step));
 
   return {
     apply: function () {

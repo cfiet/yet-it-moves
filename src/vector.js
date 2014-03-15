@@ -29,29 +29,45 @@ function createVector(data) {
           y = this.y();
       return Math.sqrt(x*x + y*y);
     },
-    unit: function () {
-      var l = this.length();
-
+    clone: function () {
       return createVector({
-        x: this.x() / l,
-        y: this.y() / l
+        x: this.x(),
+        y: this.y()
       });
     },
-    add: function (r) {
-      return createVector({
-        x: this.x() + r.x(),
-        y: this.y() + r.y()
-      });
+    rAdd: function (v) {
+      xValue = v.x() + xValue;
+      yValue = v.y() + yValue;
+      return this;
+    },
+    add: function (v) {
+      xValue += v.x();
+      yValue += v.y();
+      return this;
+    },
+    rSub: function (v) {
+      xValue = v.x() - xValue;
+      yValue = v.y() - yValue;
+      return this;
+    },
+    sub: function (v) {
+      xValue -= v.x();
+      yValue -= v.y();
+      return this;
     },
     mul: function (a) {
-      return createVector({
-        x: this.x() * a,
-        y: this.y() * a
-      });
+      xValue = xValue * a;
+      yValue = yValue * a;
+      return this;
     },
-    sub: function (r) {
-      var rrev = r.mul(-1);
-      return this.add(rrev);
+    div: function (a) {
+      xValue = xValue / a;
+      yValue = yValue / a;
+      return this;
+    },
+    toUnit: function () {
+      var l = this.length();
+      return this.div(l);
     },
     toJSON: function () {
       return {
