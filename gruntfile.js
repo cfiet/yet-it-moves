@@ -38,12 +38,6 @@ module.exports = function(grunt) {
         options: {
           livereload: true
         }
-      },
-      lib: {
-        files: ["lib/**"],
-        options: {
-          livereload: true
-        }
       }
     }
   });

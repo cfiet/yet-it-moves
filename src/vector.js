@@ -25,9 +25,12 @@ function createVector(data) {
       return yValue;
     },
     length: function () {
+      return Math.sqrt(this.lengthSquare());
+    },
+    lengthSquare: function () {
       var x = this.x(),
           y = this.y();
-      return Math.sqrt(x*x + y*y);
+      return x*x + y*y;
     },
     clone: function () {
       return createVector({
@@ -74,6 +77,11 @@ function createVector(data) {
         x: this.x(),
         y: this.y()
       };
+    },
+    update: function (v) {
+      xValue = v.x();
+      yValue = v.y();
+      return this;
     }
   };
 

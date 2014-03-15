@@ -3,18 +3,57 @@
 var G = function () {
     return 25;
   },
-  vector2 = require("../vector");
+  vector2 = require("../vector"),
+  accelerations;
 
-function accellerationBetweenPlanets(current, other) {
-  var difference = other.position().clone().sub(current.position());
-  var distance = difference.length();
-  var unit = difference.toUnit();
+function accCache() {
+  var cache = {},
+      zero = vector2();
 
-  if(distance === 0) {
-    return vector2();
+  function getKeys(p1, p2) {
+    var id1 = p1.id(),
+        id2 = p2.id();
+
+    return [
+      id1 + ":" + id2,
+      id2 + ":" + id1
+    ];
   }
 
-  return unit.mul(other.mass() * G() / (distance*distance));
+  function calculateAcc(p1, p2) {
+    var diff = p2.position().clone().sub(p1.position());
+    var distSq = diff.lengthSquare();
+
+    if(distSq === 0) {
+      return zero;
+    }
+
+    return diff.toUnit().mul(p2.mass() * G() / distSq);
+  }
+
+  return {
+    get: function(p1, p2) {
+      var keys = getKeys(p1, p2);
+      var entry = cache[keys[0]] || cache[keys[1]];
+
+      if(entry === undefined) {
+        entry = cache[keys[0]] = cache[keys[1]] = calculateAcc(p1, p2);
+      } else {
+        entry.mul(-p1.mass() / p2.mass());
+      }
+
+      return entry;
+    },
+    reset: function () {
+      cache = {};
+    }
+  }
+}
+
+accelerations = accCache();
+
+function accellerationBetweenPlanets(current, other) {
+  return accelerations.get(current, other);
 }
 
 function eulerSolution(step, currentPlanet, allPlanets) {
@@ -22,10 +61,11 @@ function eulerSolution(step, currentPlanet, allPlanets) {
   var acceleration = vector2();
 
   for(i = 0; i < allPlanets.length; i++) {
-    if(currentPlanet === planet) {
+    planet = allPlanets[i];
+    if(currentPlanet.id() === planet.id()) {
       continue;
     }
-    planet = allPlanets[i];
+
     currentAcc = accellerationBetweenPlanets(currentPlanet, planet);
     acceleration = acceleration.add(currentAcc);
   }
@@ -46,6 +86,8 @@ function solver(planets) {
       var solutions = planets.map(function (p) {
         return eulerSolution(delta, p, planets);
       });
+
+      accelerations.reset();
 
       solutions.map(function (p) {
         p.apply();
