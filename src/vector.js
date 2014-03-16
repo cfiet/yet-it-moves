@@ -12,6 +12,7 @@ function aquire(data) {
   } else {
     v = new Vector2(data);
   }
+  v.aquire();
   return v;
 }
 
@@ -30,6 +31,8 @@ function Vector2(data) {
   this._y = typeof data.y === "function" && data.y()
     || typeof data.y === "number" && data.y
     || 0.0;
+
+  this._aquires = 0;
 }
 
 Vector2.prototype = {
@@ -107,8 +110,14 @@ Vector2.prototype = {
     this._x = 0;
     this._y = 0;
   },
+  aquire: function () {
+    this._aquires++;
+  },
   dispose: function () {
-    relese(this);
+    this._aquires--;
+    if(this._aquires <= 0) {
+      relese(this);
+    }
   }
 };
 
