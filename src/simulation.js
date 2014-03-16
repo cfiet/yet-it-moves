@@ -17,10 +17,14 @@ function simulation(initialPlanets, solverFactory, rendererFactory, params) {
   var interval = null;
 
   function start() {
+    console.profile();
     interval = setInterval(function () {
       time += step;
       solver.step(step);
       renderer.frame(time);
+      if(time > 2.5) {
+        console.profileEnd();
+      }
     }, delay);
   }
 
