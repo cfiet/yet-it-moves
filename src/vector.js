@@ -1,42 +1,46 @@
 "use strict";
 
-var vectorPool = new Array(2 << 28);
-var last = 0;
+var zero = { x: 0, y : 0 },
+    POOL_SIZE = 2 << 16,
+    pool;
 
-function aquire(data) {
-  data = data || { x: 0, y: 0 };
+function VectorPool(size) {
+  this.vectors = new Array(size);
+  this.last = size-1;
 
-  var v;
-  if(last > 0) {
-    v = vectorPool[last];
-    vectorPool[last--] = undefined;
-    v.updatePlain(data);
-  } else {
-    v = new Vector2(data);
+  var i,
+      buffer = new Float32Array(size * 2);
+
+  for(i = 0; i < size; i++) {
+    this.vectors[i] = new Vector2(buffer.subarray(i*2, i*2 + 2));
   }
-  v.aquire();
-  return v;
 }
 
-function relese(v) {
-  last++;
-  v.reset();
-  vectorPool[last] = v;
+VectorPool.prototype = {
+  aquire: function(data) {
+    data = data || zero;
+    if(this.last < 0) {
+      throw new Error("Vector pool is emtpy");
+    }
+
+    var v = this.vectors[this.last];
+    this.vectors[this.last] = undefined;
+    this.last -= 1;
+
+    v.updatePlain(data);
+    v.aquire();
+
+    return v;
+  },
+  release: function (v) {
+    v.reset();
+    this.last += 1;
+    this.vectors[this.last] = v;
+  }
 }
 
-function Vector2(data) {
-  data = data || {};
-
-  this._v = new Float32Array(2);
-
-  this._v[0] = typeof data.x === "function" && data.x()
-    || typeof data.x === "number" && data.x
-    || 0.0;
-
-  this._v[1] = typeof data.y === "function" && data.y()
-    || typeof data.y === "number" && data.y
-    || 0.0;
-
+function Vector2(buffer) {
+  this._v = buffer;
   this._aquires = 0;
 }
 
@@ -121,13 +125,15 @@ Vector2.prototype = {
   dispose: function () {
     this._aquires--;
     if(this._aquires <= 0) {
-      relese(this);
+      pool.release(this);
     }
   }
 };
 
 function createVector(data) {
-  return aquire(data);
+  return pool.aquire(data);
 };
+
+pool = new VectorPool(POOL_SIZE);
 
 module.exports = createVector;
