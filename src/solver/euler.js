@@ -38,9 +38,15 @@ function accCache() {
 
       if(entry === undefined) {
         entry = cache[keys[0]] = cache[keys[1]] = calculateAcc(p1, p2);
-        entry.aquire();
+        return {
+          dispose: false,
+          vector: entry
+        }
       } else {
-        entry.mul(-p1.mass() / p2.mass())
+        return {
+          dispose: true,
+          vector: entry.mul(-p1.mass() / p2.mass())
+        }
       }
 
       return entry;
@@ -68,9 +74,11 @@ function eulerSolution(step, currentPlanet, allPlanets) {
     }
 
     currentAcc = accellerationBetweenPlanets(currentPlanet, planet);
-    acceleration = acceleration.add(currentAcc);
+    acceleration = acceleration.add(currentAcc.vector);
 
-    currentAcc.dispose();
+    if(currentAcc.dispose) {
+      currentAcc.vector.dispose();
+    }
   }
 
   nextSpeed = currentPlanet.speed().clone().add(acceleration.mul(step));
