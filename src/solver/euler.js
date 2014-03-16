@@ -4,7 +4,6 @@ var G = function () {
     return 25;
   },
   vector2 = require("../vector"),
-  zero = vector2(),
   accelerations;
 
 function calculateAcc(p1, p2) {
@@ -19,7 +18,8 @@ function calculateAcc(p1, p2) {
 }
 
 function accCache() {
-  var cache = new Array(2 << 16);
+  var cache = new Array(2 << 16),
+      zero = vector2();
 
   function getKeys(p1, p2) {
     var id1 = p1.id(),
@@ -38,15 +38,8 @@ function accCache() {
 
       if(entry === undefined) {
         entry = cache[keys[0]] = cache[keys[1]] = calculateAcc(p1, p2);
-        return {
-          dispose: false,
-          vector: entry
-        }
       } else {
-        return {
-          dispose: true,
-          vector: entry.mul(-p1.mass() / p2.mass())
-        }
+        entry.mul(-p1.mass() / p2.mass());
       }
 
       return entry;
@@ -74,17 +67,11 @@ function eulerSolution(step, currentPlanet, allPlanets) {
     }
 
     currentAcc = accellerationBetweenPlanets(currentPlanet, planet);
-    acceleration = acceleration.add(currentAcc.vector);
-
-    if(currentAcc.dispose) {
-      currentAcc.vector.dispose();
-    }
+    acceleration = acceleration.add(currentAcc);
   }
 
   nextSpeed = currentPlanet.speed().clone().add(acceleration.mul(step));
   nextPosition = currentPlanet.position().clone().add(currentPlanet.speed().mul(step));
-
-  acceleration.dispose();
 
   return {
     apply: function () {

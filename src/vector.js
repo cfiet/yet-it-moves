@@ -1,25 +1,5 @@
 "use strict";
 
-var vectorPool = [];
-
-function aquire(data) {
-  data = data || { x: 0, y: 0 };
-
-  var v;
-  if(vectorPool.length > 0) {
-    v = vectorPool.pop();
-    v.updatePlain(data);
-  } else {
-    v = new Vector2(data);
-  }
-  return v;
-}
-
-function relese(v) {
-  v.reset();
-  vectorPool.push(v);
-}
-
 function Vector2(data) {
   data = data || {};
 
@@ -97,23 +77,11 @@ Vector2.prototype = {
     this._x = v.x();
     this._y = v.y();
     return this;
-  },
-  updatePlain: function (v) {
-    this._x = v.x;
-    this._y = v.y;
-    return this;
-  },
-  reset: function () {
-    this._x = 0;
-    this._y = 0;
-  },
-  dispose: function () {
-    relese(this);
   }
 };
 
 function createVector(data) {
-  return aquire(data);
+  return new Vector2(data);
 };
 
 module.exports = createVector;

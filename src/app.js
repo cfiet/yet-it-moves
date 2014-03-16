@@ -54,6 +54,6 @@ window.yim = {
   },
   stop: function () {
     simulation.stop();
-  },
+  }
   require: require
 };
