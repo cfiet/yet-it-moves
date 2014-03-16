@@ -39,7 +39,7 @@ function accCache() {
       if(entry === undefined) {
         entry = cache[keys[0]] = cache[keys[1]] = calculateAcc(p1, p2);
       } else {
-        entry.mul(-p1.mass() / p2.mass());
+        entry.mul(-p2.mass() / p1.mass())
       }
 
       return entry;
