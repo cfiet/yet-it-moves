@@ -6,8 +6,19 @@ var G = function () {
   vector2 = require("../vector"),
   accelerations;
 
+function calculateAcc(p1, p2) {
+  var diff = p2.position().clone().sub(p1.position());
+  var distSq = diff.lengthSquare();
+
+  if(distSq === 0) {
+    return zero;
+  }
+
+  return diff.toUnit().mul(p2.mass() * G() / distSq);
+}
+
 function accCache() {
-  var cache = {},
+  var cache = new Array(2 << 16),
       zero = vector2();
 
   function getKeys(p1, p2) {
@@ -15,20 +26,9 @@ function accCache() {
         id2 = p2.id();
 
     return [
-      id1 + ":" + id2,
-      id2 + ":" + id1
+      (2 << 15) * id1 + id2,
+      (2 << 15) * id2 + id1
     ];
-  }
-
-  function calculateAcc(p1, p2) {
-    var diff = p2.position().clone().sub(p1.position());
-    var distSq = diff.lengthSquare();
-
-    if(distSq === 0) {
-      return zero;
-    }
-
-    return diff.toUnit().mul(p2.mass() * G() / distSq);
   }
 
   return {
