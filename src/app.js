@@ -1,7 +1,8 @@
 var rand = require("./utils/random"),
     simulationFactory = require("./simulation"),
     canvasRendererFactory = require("./renderer/canvas"),
-    eulerSolverFactory = require("./solver/euler");
+    eulerSolverFactory = require("./solver/euler"),
+    simulation;
 
 function createPlanets(number, width, height) {
   var planets = new Array(number),
@@ -42,11 +43,17 @@ window.yim = {
     var planetNumber = settings.planets || 512;
     var planets = createPlanets(planetNumber, canvas.width, canvas.height);
 
-    var simulation = simulationFactory(planets,
-        eulerSolverFactory,
-        canvasRendererFactory.bind(null, settings.canvas));
+    simulation = simulationFactory(planets,
+      eulerSolverFactory,
+      canvasRendererFactory.bind(null, settings.canvas));
 
     simulation.start();
   },
+  start: function() {
+    simulation.start();
+  },
+  stop: function () {
+    simulation.stop();
+  }
   require: require
 };
