@@ -34,8 +34,11 @@ function planet (state) {
       return id;
     },
     update: function(p, s) {
-      position = p;
-      speed = s;
+      position.update(p);
+      speed.update(s);
+
+      p.dispose();
+      s.dispose();
     },
     toJSON: function () {
       return {
