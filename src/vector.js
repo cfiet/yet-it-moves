@@ -1,13 +1,15 @@
 "use strict";
 
-var vectorPool = [];
+var vectorPool = new Array(2 << 28);
+var last = 0;
 
 function aquire(data) {
   data = data || { x: 0, y: 0 };
 
   var v;
-  if(vectorPool.length > 0) {
-    v = vectorPool.pop();
+  if(last > 0) {
+    v = vectorPool[last];
+    vectorPool[last--] = undefined;
     v.updatePlain(data);
   } else {
     v = new Vector2(data);
@@ -17,8 +19,9 @@ function aquire(data) {
 }
 
 function relese(v) {
+  last++;
   v.reset();
-  vectorPool.push(v);
+  vectorPool[last] = v;
 }
 
 function Vector2(data) {
